@@ -4,6 +4,8 @@
 
 **2026-09-12 迁移接管**：老安装退役为 `D:\GitHub\ComfyUI old`（备份保留；对比后仅 vae_approx 6 个 TAESD/taef1 预览解码器为本机所缺，已拷入 `models/vae_approx/`），本目录由 `ComfyUI2` 更名为 `D:\GitHub\ComfyUI`，成为唯一主力安装。全部脚本/文档内路径同步更新；`extra_model_paths.yaml` 借用配置删除（本机 models 已自足）；venv 随目录整体迁移（`pyvenv.cfg` 的 home 指向 uv 全局 Python，不受路径影响）；端口维持 8189（全部脚本已写死，8188 虽已空出但不改）。
 
+**2026-09-12 迁移收尾修复**：迁移时 `.git` 被遗留在了旧 `ComfyUI2` 目录（导致 GitHub 桌面端在新路径找不到仓库），已整体移回本目录，仓库验证正常（master 领先 origin/master 1 个迁移提交，工作区干净）；`.venv\Scripts\activate` 5 个变体里硬编码的旧路径已同步改为 `D:\GitHub\ComfyUI`（bash/bat/csh/fish/nu，`pyvenv.cfg` 本就无旧路径无需动）。GitHub 桌面端需重新添加本目录（File → Add local repository → `D:\GitHub\ComfyUI`），旧的 `ComfyUI2` 条目可 Remove（只移列表不删文件）；空壳目录被占用暂未删除，关闭占用后手动删即可。
+
 ## Git 远端
 
 - `origin` = 用户 fork `ningnuo-dot/ComfyUI`（master 跟踪 origin/master）；`upstream` = 官方 `Comfy-Org/ComfyUI`。2026-09-12 应客户端提示把 upstream 从旧地址 `comfyanonymous/ComfyUI` 更新为现址（同仓库迁移，历史与提交号不变）。
