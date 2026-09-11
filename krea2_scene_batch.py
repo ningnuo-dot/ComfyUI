@@ -14,7 +14,7 @@ SCENES = [
     ("shanghai_bluehour","The Bund in Shanghai at blue hour, historic stone buildings along the waterfront, the futuristic Pudong skyline glowing across the Huangpu river" + STYLE, 20260918),
 ]
 
-g = json.load(open(r"D:\GitHub\ComfyUI2\models\krea2_first_test.json", encoding="utf-8"))
+g = json.load(open(r"D:\GitHub\ComfyUI\models\krea2_first_test.json", encoding="utf-8"))
 g["5"]["inputs"]["width"] = 1216
 g["5"]["inputs"]["height"] = 832
 
@@ -52,7 +52,7 @@ for slug, (st, outs) in done.items():
         for img in out.get("images", []):
             u = f"{base}/view?filename={urllib.parse.quote(img['filename'])}&subfolder={urllib.parse.quote(img.get('subfolder',''))}&type={img['type']}"
             d = urllib.request.urlopen(u, timeout=60).read()
-            dst = "D:/GitHub/ComfyUI2/output/" + img.get("subfolder", "") + "/" + img["filename"]
+            dst = "D:/GitHub/ComfyUI/output/" + img.get("subfolder", "") + "/" + img["filename"]
             open(dst, "wb").write(d)
             ok += 1
             print("完成:", slug, dst, f"({len(d)} bytes)", flush=True)

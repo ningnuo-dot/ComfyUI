@@ -2,7 +2,7 @@
 import json, time, urllib.request, urllib.parse
 
 base = "http://127.0.0.1:8189"
-graph = json.load(open(r"D:\GitHub\ComfyUI2\models\krea2_first_test.json", encoding="utf-8"))
+graph = json.load(open(r"D:\GitHub\ComfyUI\models\krea2_first_test.json", encoding="utf-8"))
 req = urllib.request.Request(base + "/prompt", data=json.dumps({"prompt": graph}).encode(), headers={"Content-Type": "application/json"})
 t0 = time.time()
 resp = json.load(urllib.request.urlopen(req, timeout=30))
@@ -37,7 +37,7 @@ if outputs and ok == "success":
         for img in out.get("images", []):
             url = f"{base}/view?filename={urllib.parse.quote(img['filename'])}&subfolder={urllib.parse.quote(img.get('subfolder',''))}&type={img['type']}"
             data = urllib.request.urlopen(url, timeout=60).read()
-            dst = "D:/GitHub/ComfyUI2/output/" + img["filename"]
+            dst = "D:/GitHub/ComfyUI/output/" + img["filename"]
             open(dst, "wb").write(data)
             print("成图已取回:", dst, f"({len(data)} bytes)")
 else:

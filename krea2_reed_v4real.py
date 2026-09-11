@@ -15,7 +15,7 @@ VARIANTS = [
     ("v4r3_left",  CORE + "，大树在小径左侧，小径向右弯曲延伸", 2026091107),
     ("v4r4_dusk",  CORE.replace("午后阳光", "傍晚贴着地平线的落日") + "，整体色调更橙更浓", 2026091108),
 ]
-g = json.load(open(r"D:\GitHub\ComfyUI2\models\krea2_first_test.json", encoding="utf-8"))
+g = json.load(open(r"D:\GitHub\ComfyUI\models\krea2_first_test.json", encoding="utf-8"))
 g["5"]["inputs"]["width"] = 1600
 g["5"]["inputs"]["height"] = 900
 import requests
@@ -36,7 +36,7 @@ for slug, prompt, seed in VARIANTS:
             for nid, out in e.get("outputs", {}).items():
                 for img in out.get("images", []):
                     u = f"{base}/view?filename={urllib.parse.quote(img['filename'])}&subfolder={urllib.parse.quote(img.get('subfolder',''))}&type={img['type']}"
-                    dst = "D:/GitHub/ComfyUI2/output/" + img.get("subfolder", "") + "/" + img["filename"]
+                    dst = "D:/GitHub/ComfyUI/output/" + img.get("subfolder", "") + "/" + img["filename"]
                     open(dst, "wb").write(urllib.request.urlopen(u, timeout=60).read())
             print("完成:", slug, f"{time.time()-t0:.0f}s", flush=True)
             break

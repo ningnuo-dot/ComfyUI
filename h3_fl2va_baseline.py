@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""MiniMax H3 FL2VA 基线首跑脚本（ComfyUI2 / 8189 端口）
+"""MiniMax H3 FL2VA 基线首跑脚本（ComfyUI / 8189 端口）
 
 基线参数（对齐计划书 Phase 1 + 官方模板 video_minimax_h3_t2v）：
 - 模型：Kijai w4a8 pruned + FL2VA-Acc-8Step pruned LoRA（官方模板同款用法）
@@ -7,7 +7,7 @@
 - 864x480 @ 124 帧（约 5.2s，H3 训练范围下限 124-362 帧）
 - steps=8，scheduler=simple，sampler=res_multistep，种子固定
 
-用法：先腾显存（≥11.5GB 空闲）并启动 ComfyUI2，再运行本脚本。
+用法：先腾显存（≥11.5GB 空闲）并启动 ComfyUI，再运行本脚本。
 启动：.venv/Scripts/python.exe main.py --port 8189 --disable-async-offload --disable-pinned-memory
 """
 import json
@@ -112,7 +112,7 @@ def main():
             if isinstance(files, list):
                 outs.extend(f.get("filename", "") for f in files if isinstance(f, dict))
     print(f"[完成] {time.time()-t0:.0f}s，输出: {outs}")
-    print("目录: D:\\GitHub\\ComfyUI2\\output\\video\\MiniMax_H3\\")
+    print("目录: D:\\GitHub\\ComfyUI\\output\\video\\MiniMax_H3\\")
 
 
 if __name__ == "__main__":

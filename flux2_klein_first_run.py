@@ -1,4 +1,4 @@
-# FLUX.2 klein 4B fp8 首测脚本（ComfyUI2 / 8189）：提交工作流→轮询→取回成图（改提示词复用）
+# FLUX.2 klein 4B fp8 首测脚本（ComfyUI / 8189）：提交工作流→轮询→取回成图（改提示词复用）
 # 骨架复用 krea2_first_run.py；图结构来自官方模板 blueprints/Image Edit (Flux.2 Klein 4B).json
 # 蒸馏版参数：4 步 + cfg 1.0（官方编辑模板用 base 版 20 步 cfg5，蒸馏版不等价）
 import json, time, urllib.request, urllib.parse, sys
@@ -60,7 +60,7 @@ if outputs and ok == "success":
         for img in out.get("images", []):
             url = f"{base}/view?filename={urllib.parse.quote(img['filename'])}&subfolder={urllib.parse.quote(img.get('subfolder',''))}&type={img['type']}"
             data = urllib.request.urlopen(url, timeout=60).read()
-            dst = "D:/GitHub/ComfyUI2/output/" + img["filename"]
+            dst = "D:/GitHub/ComfyUI/output/" + img["filename"]
             open(dst, "wb").write(data)
             print("成图已取回:", dst, f"({len(data)} bytes)")
 else:

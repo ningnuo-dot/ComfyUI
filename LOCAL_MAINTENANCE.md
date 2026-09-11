@@ -1,6 +1,8 @@
-# ComfyUI2 本地维护说明（MiniMax H3 部署线）
+# ComfyUI 本地维护说明（MiniMax H3 部署线）
 
-2026-09-11 新建。与老安装 `D:\GitHub\ComfyUI` 并排的全新官方 ComfyUI，作为 MiniMax H3 本地部署与后续主力候选；老安装原文未动作回退。上游自带 AGENTS.md 保留不动，本文件只记本地定制。机器：RTX 4070 **12GB**（12282MB）+ 物理内存 **16GB**，D 盘。
+2026-09-11 新建。与老安装（现退役为 `D:\GitHub\ComfyUI old`）并排的全新官方 ComfyUI，作为 MiniMax H3 本地部署与后续主力候选；老安装原文未动作回退。上游自带 AGENTS.md 保留不动，本文件只记本地定制。机器：RTX 4070 **12GB**（12282MB）+ 物理内存 **16GB**，D 盘。
+
+**2026-09-12 迁移接管**：老安装退役为 `D:\GitHub\ComfyUI old`（备份保留；对比后仅 vae_approx 6 个 TAESD/taef1 预览解码器为本机所缺，已拷入 `models/vae_approx/`），本目录由 `ComfyUI2` 更名为 `D:\GitHub\ComfyUI`，成为唯一主力安装。全部脚本/文档内路径同步更新；`extra_model_paths.yaml` 借用配置删除（本机 models 已自足）；venv 随目录整体迁移（`pyvenv.cfg` 的 home 指向 uv 全局 Python，不受路径影响）；端口维持 8189（全部脚本已写死，8188 虽已空出但不改）。
 
 ## Git 远端
 
@@ -10,7 +12,7 @@
 ## 启动
 
 ```bat
-D:\GitHub\ComfyUI2\.venv\Scripts\python.exe main.py --port 8189 --disable-async-offload --disable-pinned-memory
+D:\GitHub\ComfyUI\.venv\Scripts\python.exe main.py --port 8189 --disable-async-offload --disable-pinned-memory
 ```
 
 - 端口固定 8189：8188 被老 ComfyUI 占用。
@@ -26,7 +28,7 @@ D:\GitHub\ComfyUI2\.venv\Scripts\python.exe main.py --port 8189 --disable-async-
 
 ## 模型
 
-- `extra_model_paths.yaml` 借用老安装 `D:\GitHub\ComfyUI\models`（只读借用，同名本机优先），klein/Krea-2 无需迁移即可用。
+- `extra_model_paths.yaml` 借用配置已于 2026-09-12 删除：klein/Krea-2/H3 权重此前已全部实体迁入本机 models/，对比 `ComfyUI old/models` 后仅缺 vae_approx 预览解码器 6 个（已拷入补齐），本机 models/ 完全自足。
 - H3 权重全部在本机 `models/`，SHA-256 清单 `models/h3_weights_sha256.txt`（7 个文件 2026-09-11 全部校验通过，LoRA 单独验过 1 个）：
   - `diffusion_models/minimax_h3_{fl2va,ref2va}_pruned_w4a8_mixed.safetensors`（Kijai，11.7/11.0GiB，ComfyUI 原生量化格式）
   - `text_encoders/Qwen3-VL-32B-Instruct-MiniMax-H3-L0-49-UD-Q2_K_XL.gguf` + `mmproj-BF16.gguf`（nif0，8.9/1.1GiB；mmproj 在 R2V 图片参考时是否必需**待验证**，纯文本 T2V 用不到）
@@ -62,6 +64,6 @@ D:\GitHub\ComfyUI2\.venv\Scripts\python.exe main.py --port 8189 --disable-async-
 ## Krea-2 Turbo（2026-09-11 迁入，同日与 klein 一起）
 
 - 权重三件套 17.4GB 从老安装**实体迁入**本机 `models/`（fp8 主模型 krea2_turbo_fp8_scaled + 编码器 qwen3vl_4b_fp8_scaled + VAE qwen_image_vae），SHA-256 清单 `models/krea2_weights_sha256.txt`。老安装已无任何生图模型，仅剩退役冻结的 Kie Omni 节点。
-- 脚本 6 个随迁并全部补丁（8188→8189、输出/工作流路径改 ComfyUI2）：`krea2_first_run.py`（单张）、`krea2_scene_batch.py`（批量）、`krea2_probe.py`、`krea2_reed_backlit/retry/v4real.py`。工作流 `user/default/workflows/Krea2文生图.json`。
+- 脚本 6 个随迁并全部补丁（8188→8189、输出/工作流路径改 ComfyUI）：`krea2_first_run.py`（单张）、`krea2_scene_batch.py`（批量）、`krea2_probe.py`、`krea2_reed_backlit/retry/v4real.py`。工作流 `user/default/workflows/Krea2文生图.json`。
 - 实测：8189 上 /free 后首跑 84.3s（17.4GB 冷加载），成图正常，显存 9.27GB。
 - 注意：klein（9.2GB）与 krea2（9.8GB）同显存互斥，**换模型任务前必须 POST /free**（本文件 H3 节既有约束，对 klein/krea2 同样适用）。
